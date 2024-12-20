@@ -9,7 +9,7 @@ Este proyecto permite desplegar infraestructura en Google Cloud Platform utiliza
 - Make (opcional, para usar comandos simplificados)
 
 ## Estructura del Proyecto
-
+```plaintext
 proyecto/
 ├── config/
 │   └── infrastructure.yaml    # Configuración de infraestructura
@@ -26,7 +26,7 @@ proyecto/
 ├── INSTRUCCIONES.md          # Guía detallada de uso
 ├── requirements.txt          # Dependencias Python
 └── .gitignore               # Configuración de git
-
+```
 ## Uso
 
 1. Configura tu infraestructura en `config/infrastructure.yaml`
