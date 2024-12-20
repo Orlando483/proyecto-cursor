@@ -1,0 +1,57 @@
+infrastructure:
+  provider: google
+  project_id: "tu-proyecto-id"
+  region: "us-central1"
+  zone: "us-central1-a"
+
+  resources:
+    network:
+      name: "red-vms"
+      auto_create_subnetworks: false
+      
+    subnet:
+      name: "subnet-vms"
+      ip_cidr_range: "10.0.1.0/24"
+      
+    instances:
+      - name: "vm-web"
+        machine_type: "e2-medium"
+        scheduling:
+          preemptible: false
+          automatic_restart: true
+          on_host_maintenance: "MIGRATE"
+        boot_disk:
+          image: "debian-cloud/debian-11"
+          size_gb: 20
+          type: "pd-ssd"
+        additional_disks:
+          - name: "data-disk-1"
+            size_gb: 50
+            type: "pd-balanced"
+        service_account:
+          email: "default"
+          scopes: ["cloud-platform"]
+        labels:
+          environment: "production"
+          app: "web"
+        tags: ["http-server", "https-server"]
+        metadata:
+          startup-script: |
+            #!/bin/bash
+            apt-get update
+            apt-get install -y nginx
+            
+      - name: "vm-app"
+        machine_type: "e2-standard-2"
+        boot_disk:
+          image: "ubuntu-os-cloud/ubuntu-2204-lts"
+          size_gb: 30
+          type: "pd-balanced"
+        tags: ["app-server"]
+        metadata:
+          startup-script: |
+            #!/bin/bash
+            apt-get update
+            apt-get install -y docker.io
+            systemctl start docker
+            systemctl enable docker
